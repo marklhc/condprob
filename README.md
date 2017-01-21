@@ -1,4 +1,6 @@
 # condprob
 
-install.packages("plotly")
+```
+# install.packages("plotly")
 shiny::runGitHub("condprob", "marklhc")
+```
