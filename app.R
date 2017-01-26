@@ -18,6 +18,15 @@ p <- plot_ly(x = kd$x, y = kd$y, z = kd$z) %>% add_surface()
 kd2 <- kde2d(mu, tau, n = c(77, 73), 
              h = c(width.SJ(mu), width.SJ(tau)), 
              lims = c(round(range(mu), 0), round(range(tau), 0)))
+s <- subplot(
+  plot_ly(x = mu, type = "histogram"),
+  plotly_empty(),
+  plot_ly(x = mu, y = tau, type = "histogram2dcontour"),
+  plot_ly(y = tau, type = "histogram"),
+  nrows = 2, heights = c(0.2, 0.8), widths = c(0.8, 0.2), margin = 0,
+  shareX = TRUE, shareY = TRUE, titleX = FALSE, titleY = FALSE
+)
+p3 <- layout(s, showlegend = FALSE)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -42,8 +51,14 @@ ui <- fluidPage(
       
       # Show a plot of the generated distribution
       mainPanel(
-         plotlyOutput("surfPlot"),
-         plotlyOutput("condPlot")
+        tabsetPanel(
+          tabPanel("Joint", 
+                   plotlyOutput("surfPlot", height = "800px")), 
+          tabPanel("Conditional", 
+                   plotlyOutput("condPlot")), 
+          tabPanel("Contour", 
+                   plotlyOutput("marPlot"), height = "600px")
+        )
       )
    )
 )
@@ -61,6 +76,9 @@ server <- function(input, output) {
                                    y = kd2$z[ , which(kd2$y == input$y)]) %>%
        layout(xaxis = list(title = paste0("P(X | Y = ", input$y, ")")))
      subplot(p1, p2, titleX = TRUE)
+   })
+   output$marPlot <- renderPlotly({
+     p3
    })
 }
 
