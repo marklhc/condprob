@@ -46,7 +46,8 @@ ui <- fluidPage(
                      "y-value",
                      min = round(min(tau), 0),
                      max = round(max(tau), 0),
-                     value = 0)
+                     value = 0), 
+         p("Change the input values for x and y to see the corresponding conditional distributions")
       ),
       
       # Show a plot of the generated distribution
@@ -54,9 +55,9 @@ ui <- fluidPage(
         tabsetPanel(
           tabPanel("Joint", 
                    plotlyOutput("surfPlot", height = "800px")), 
-          tabPanel("Conditional", 
+          tabPanel("Conditionals", 
                    plotlyOutput("condPlot")), 
-          tabPanel("Contour", 
+          tabPanel("Contour and Marginals", 
                    plotlyOutput("marPlot"), height = "600px")
         )
       )
